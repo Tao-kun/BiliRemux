@@ -18,7 +18,7 @@ def remux(flv_video_path):
     files_in_flv_path = glob.glob('{}{}*'.format(flv_video_path, os.sep))
     for file in files_in_flv_path:
         file_name = file.split(os.sep)[-1]
-        if len(file_name) < 10 and len(file_name) >= 5:
+        if 5 <= len(file_name) < 10:
             video_list.append(os.path.join(flv_video_path, file_name))
     if len(video_list) == 1:
         # MP4
@@ -56,7 +56,7 @@ def get_video_dir_path():
 def find_flv_path(video_part_path):
     '''
     Find flv/blv(BiliBili FLV)/mp4(segmented mp4) files from all videos.
-    :param video_part_path: (str)
+    :param video_part_path: (str) A path of the dictionary of a downloaded video.
     :return: (str) The path of video which hadn't been remuxed.
     If the video had been remuxed.
     :return: (NoneType) None
