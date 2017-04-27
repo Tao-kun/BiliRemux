@@ -9,6 +9,11 @@ from config import *
 
 
 def remux(flv_video_path):
+    '''
+    Remux flv/blv(BiliBili FLV)/mp4(segmented mp4) into mp4.
+    :param flv_video_path: (str) The path of video which hadn't been remuxed.
+    :return: (NoneType) None
+    '''
     video_list = []
     files_in_flv_path = glob.glob('{}{}*'.format(flv_video_path, os.sep))
     for file in files_in_flv_path:
@@ -35,6 +40,10 @@ def remux(flv_video_path):
 
 
 def get_video_dir_path():
+    '''
+    Scan the external sdcard to get all downloaded videos' path.
+    :return: (list) All dictionaries which contain downloaded videos.
+    '''
     video_dir_paths = []
     disk_drive = sys.argv[1]
     for i in PACKAGE_NAMES:
@@ -45,6 +54,13 @@ def get_video_dir_path():
 
 
 def find_flv_path(video_part_path):
+    '''
+    Find flv/blv(BiliBili FLV)/mp4(segmented mp4) files from all videos.
+    :param video_part_path: (str)
+    :return: (str) The path of video which hadn't been remuxed.
+    If the video had been remuxed.
+    :return: (NoneType) None
+    '''
     entry_json_path = '{}{}entry.json'.format(video_part_path, os.sep)
     with open(entry_json_path, "rb") as f:
         entry_json = f.read().decode()
