@@ -16,3 +16,9 @@ A remuxer for BiliBili Android Application
 ```
 python remuxer.py [sdcard path with \ or /]
 ```
+
+## License
+
+MIT License
+
+Copyright (c) 2017 Tao-kun
