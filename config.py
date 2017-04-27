@@ -13,5 +13,4 @@ PACKAGE_NAMES = ('tv.danmaku.bili', 'tv.danmaku.bilixl', 'com.bilibili.app.blue'
 # 1. 3 applications' package names
 # 1. avid
 # 3. part id
-# 4. for searching of videos
 DOWNLOAD_PATH = 'Android/data/{}/download/{}/{}'
