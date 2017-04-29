@@ -21,4 +21,4 @@ python remuxer.py [sdcard path with \ or /]
 
 MIT License
 
-Copyright (c) 2017 Tao-kun
+Copyright (c) 2017 Zhuo Yitao
