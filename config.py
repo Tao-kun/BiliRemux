@@ -9,7 +9,7 @@ FFMPEG_PATH = r'D:\MarukoToolbox\tools\ffmpeg.exe'
 # com.bilibili.app.blue        哔哩哔哩概念版（测试版）
 PACKAGE_NAMES = ('tv.danmaku.bili', 'tv.danmaku.bilixl', 'com.bilibili.app.blue')
 
-# Description for 4 {}.
+# Description for 3 {}.
 # 1. 3 applications' package names
 # 1. avid
 # 3. part id

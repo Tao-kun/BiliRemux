@@ -11,7 +11,7 @@ from config import *
 def remux(flv_video_path):
     '''
     Remux flv/blv(BiliBili FLV)/mp4(segmented mp4) into mp4.
-    :param flv_video_path: (str) The path of video which hadn't been remuxed.
+    :param flv_video_path: (str) The path of video which have not been remuxed.
     :return: (NoneType) None
     '''
     video_list = []
@@ -24,13 +24,14 @@ def remux(flv_video_path):
         # MP4
         if video_list[0].split('.')[-1] == 'mp4':
             shutil.move(video_list[0], '{}_remux.mp4'.format(flv_video_path))
-        # blv/flv
+        # flv/blv
         else:
             command = FFMPEG_PATH + ' -i {}  -y -vcodec copy -acodec copy {}_remux.mp4'
             os.system(command.format(video_list[0], flv_video_path))
     else:
         command = FFMPEG_PATH + ' -i "concat:{}" -c copy -bsf:a aac_adtstoasc {}_remux.mp4'
         os.system(command.format('|'.join(video_list), flv_video_path))
+    # delete flv/blv/mp4(segmented)
     for file in files_in_flv_path:
         try:
             os.remove(file)
@@ -58,7 +59,7 @@ def find_flv_path(video_part_path):
     Find flv/blv(BiliBili FLV)/mp4(segmented mp4) files from all videos.
     :param video_part_path: (str) A path of the dictionary of a downloaded video.
     :return: (str) The path of video which hadn't been remuxed.
-    If the video had been remuxed.
+    If the video had been remuxed or the download is not completed.
     :return: (NoneType) None
     '''
     entry_json_path = '{}{}entry.json'.format(video_part_path, os.sep)
