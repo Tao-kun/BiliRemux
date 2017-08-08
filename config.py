@@ -11,6 +11,6 @@ PACKAGE_NAMES = ('tv.danmaku.bili', 'tv.danmaku.bilixl', 'com.bilibili.app.blue'
 
 # Description for 3 {}.
 # 1. 3 applications' package names
-# 1. avid
+# 2. avid
 # 3. part id
 DOWNLOAD_PATH = 'Android/data/{}/download/{}/{}'
