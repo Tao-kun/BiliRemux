@@ -66,10 +66,16 @@ def remux(flv_video_path):
             shutil.move(video_list[0], '{}_remux.mp4'.format(flv_video_path))
         # flv/blv
         else:
-            command = FFMPEG_PATH + ' -i {}  -y -vcodec copy -acodec copy {}_remux.mp4'
+            # TODO: Convert flv to ts, then concat them because flv could not concat.
+            #ffmpeg -i input1.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input1.ts
+            #ffmpeg -i input2.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input2.ts
+            #ffmpeg -i input3.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input3.ts
+            #ffmpeg -i "concat:input1.ts|input2.ts|input3.ts" -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
+            #REFER: http://blog.csdn.net/doublefi123/article/details/47276739
+            command = FFMPEG_PATH + ' -i {}  -y -vcodec copy -acodec copy -movflags +faststart {}_remux.mp4'
             os.system(command.format(video_list[0], flv_video_path))
     else:
-        command = FFMPEG_PATH + ' -i "concat:{}" -c copy -bsf:a aac_adtstoasc {}_remux.mp4'
+        command = FFMPEG_PATH + ' -i "concat:{}" -c copy -bsf:a aac_adtstoasc -movflags +faststart {}_remux.mp4'
         os.system(command.format('|'.join(video_list), flv_video_path))
     # delete flv/blv/mp4(segmented)
     for file in files_in_flv_path:
