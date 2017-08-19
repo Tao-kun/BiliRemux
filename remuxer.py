@@ -8,6 +8,27 @@ import sys
 from config import *
 
 
+def get_format(path):
+    """
+    Get the file's format by path.
+    :param path: (str) The path of the file.
+    :return: (str) The format of the file.
+    """
+    return path.split('.')[-1]
+
+
+def convert_format(video_file_name, to_format):
+    """
+    Convert the name of a file to another format.
+    Example: 0.mp4 -> 0.ts
+    :param video_file_name: (str) Init file name.
+    :param to_format: (str) New file format.
+    :return: (str) Renamed file name.
+
+    """
+    return video_file_name.replace(get_format(video_file_name), to_format)
+
+
 def get_video_dir_path():
     """
     Scan the external sdcard to get all downloaded videos' path.
@@ -66,15 +87,19 @@ def remux(flv_video_path):
             shutil.move(video_list[0], '{}_remux.mp4'.format(flv_video_path))
         # flv/blv
         else:
-            # TODO: Convert flv to ts, then concat them because flv could not concat.
-            #ffmpeg -i input1.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input1.ts
-            #ffmpeg -i input2.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input2.ts
-            #ffmpeg -i input3.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input3.ts
-            #ffmpeg -i "concat:input1.ts|input2.ts|input3.ts" -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
-            #REFER: http://blog.csdn.net/doublefi123/article/details/47276739
             command = FFMPEG_PATH + ' -i {}  -y -vcodec copy -acodec copy -movflags +faststart {}_remux.mp4'
             os.system(command.format(video_list[0], flv_video_path))
     else:
+        # Convert flv to ts, then concat them because flv could not concat successfully.
+        # ffmpeg -i input1.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input1.ts
+        # ffmpeg -i input2.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input2.ts
+        # ffmpeg -i "concat:input1.ts|input2.ts" -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
+        # REFER: http://blog.csdn.net/doublefi123/article/details/47276739
+        for video in video_list:
+            command = FFMPEG_PATH + ' -i {input} -c copy -bsf:v h264_mp4toannexb -f mpegts {outpput}'
+            os.system(command.format(input=video, output=convert_format(video, 'ts')))
+            os.remove(video)
+        video_list = [convert_format(video, 'ts') for video in video_list]
         command = FFMPEG_PATH + ' -i "concat:{}" -c copy -bsf:a aac_adtstoasc -movflags +faststart {}_remux.mp4'
         os.system(command.format('|'.join(video_list), flv_video_path))
     # delete flv/blv/mp4(segmented)
@@ -109,7 +134,7 @@ if __name__ == '__main__':
         flv_path = find_flv_path(part)
         if flv_path is not None:
             remux(flv_path)
-    try:
-        move_to_defult_path(video_path)
-    except:
-        pass
+    #try:
+    #    move_to_defult_path(video_path)
+    #except:
+    #    pass

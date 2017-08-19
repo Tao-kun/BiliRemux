@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Please change it into the dictionary which contains your FFmpeg(.exe).
-FFMPEG_PATH = r'D:\MarukoToolbox\tools\ffmpeg.exe'
+FFMPEG_PATH = r'D:\ffmpeg-3.3.3-win64-static\bin\ffmpeg.exe'
 
 # There are at least 3 version of BilBili Application.
 # tv.danmaku.bili              哔哩哔哩动画(正式版)
