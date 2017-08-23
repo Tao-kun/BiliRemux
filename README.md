@@ -13,7 +13,7 @@ A remuxer for BiliBili Android Application
 1. Filling FFmpeg's path in config.py.
 
 2. Run it.
-```
+```python
 python remuxer.py [sdcard path with \ or /]
 ```
 

@@ -37,7 +37,7 @@ def get_video_dir_path():
     video_dir_paths = []
     disk_drive = sys.argv[1]
     for i in PACKAGE_NAMES:
-        glob_param = os.path.join(disk_drive, DOWNLOAD_PATH.replace('/', os.sep)).format(i, '*', '*')
+        glob_param = os.path.join(disk_drive.replace('/', os.sep), DOWNLOAD_PATH.replace('/', os.sep)).format(i, '*', '*')
         glob_result = glob.glob(glob_param)
         video_dir_paths.extend(glob_result)
     return video_dir_paths
@@ -79,6 +79,9 @@ def remux(flv_video_path):
     files_in_flv_path = glob.glob('{}{}*'.format(flv_video_path, os.sep))
     for file in files_in_flv_path:
         file_name = file.split(os.sep)[-1]
+        # len('0.flv')        == 5
+        # len('index.json')   == 10
+        # len('0.flv.4m.sum') == 12
         if 5 <= len(file_name) < 10:
             video_list.append(os.path.join(flv_video_path, file_name))
     if len(video_list) == 1:
@@ -120,11 +123,12 @@ def move_to_defult_path(video_path):
     :return: (NoneType) None
     """
     for i in video_path:
+        # i of video_path: Android/data/tv.danmaku.bilixl/download/aid/pid
         if i.split(os.sep)[-4] != 'tv.danmaku.bili':
             destination_path = i.replace(i.split(os.sep)[-4], 'tv.danmaku.bili')
             shutil.move(i, destination_path)
-            os.rmdir(i)
-            # os.rmdir((os.sep).join(i.split(os.sep)[:-1]))
+            # Android/data/tv.danmaku.bilixl/download/aid/pid -> Android/data/tv.danmaku.bilixl/download/aid
+            os.rmdir((os.sep).join(i.split(os.sep)[:-1]))
 
 
 if __name__ == '__main__':
@@ -134,7 +138,4 @@ if __name__ == '__main__':
         flv_path = find_flv_path(part)
         if flv_path is not None:
             remux(flv_path)
-    #try:
-    #    move_to_defult_path(video_path)
-    #except:
-    #    pass
+    move_to_defult_path(video_path)
