@@ -24,7 +24,6 @@ def convert_format(video_file_name, to_format):
     :param video_file_name: (str) Init file name.
     :param to_format: (str) New file format.
     :return: (str) Renamed file name.
-
     """
     return video_file_name.replace(get_format(video_file_name), to_format)
 
@@ -37,7 +36,8 @@ def get_video_dir_path():
     video_dir_paths = []
     disk_drive = sys.argv[1]
     for i in PACKAGE_NAMES:
-        glob_param = os.path.join(disk_drive.replace('/', os.sep), DOWNLOAD_PATH.replace('/', os.sep)).format(i, '*', '*')
+        glob_param = os.path.join(disk_drive.replace('/', os.sep), DOWNLOAD_PATH.replace('/', os.sep)).format(i, '*',
+                                                                                                              '*')
         glob_result = glob.glob(glob_param)
         video_dir_paths.extend(glob_result)
     return video_dir_paths
@@ -61,7 +61,7 @@ def find_flv_path(video_part_path):
     if not glob.glob('{}{}{}_remux.mp4'.format(video_part_path, os.sep, video_file_name)):
         # print(video_part_path, video_file_name)
         flv_video_path = glob.glob('{}{}{}'.format(video_part_path, os.sep, video_file_name))
-        if flv_video_path == []:
+        if len(flv_video_path) == 0:
             return None
         else:
             return flv_video_path[0]
@@ -114,7 +114,7 @@ def remux(flv_video_path):
     os.rmdir(flv_video_path)
 
 
-def move_to_defult_path(video_path):
+def move_to_default_path(video_path):
     """
     Move videos to default path.
     Android/data/com.bilibili.app.blue/download -> Android/data/tv.danmaku.bili/download
@@ -138,4 +138,4 @@ if __name__ == '__main__':
         flv_path = find_flv_path(part)
         if flv_path is not None:
             remux(flv_path)
-    move_to_defult_path(video_path)
+    move_to_default_path(video_path)
