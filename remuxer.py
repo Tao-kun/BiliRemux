@@ -99,7 +99,7 @@ def remux(flv_video_path):
         # ffmpeg -i "concat:input1.ts|input2.ts" -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
         # REFER: http://blog.csdn.net/doublefi123/article/details/47276739
         for video in video_list:
-            command = FFMPEG_PATH + ' -i {input} -c copy -bsf:v h264_mp4toannexb -f mpegts {outpput}'
+            command = FFMPEG_PATH + ' -i {input} -c copy -bsf:v h264_mp4toannexb -f mpegts {output}'
             os.system(command.format(input=video, output=convert_format(video, 'ts')))
             os.remove(video)
         video_list = [convert_format(video, 'ts') for video in video_list]
@@ -107,6 +107,11 @@ def remux(flv_video_path):
         os.system(command.format('|'.join(video_list), flv_video_path))
     # delete flv/blv/mp4(segmented)
     for file in files_in_flv_path:
+        try:
+            os.remove(file)
+        except:
+            pass
+    for file in video_list:
         try:
             os.remove(file)
         except:
