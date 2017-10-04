@@ -36,8 +36,10 @@ def get_video_dir_path():
     video_dir_paths = []
     disk_drive = sys.argv[1]
     for i in PACKAGE_NAMES:
-        glob_param = os.path.join(disk_drive.replace('/', os.sep), DOWNLOAD_PATH.replace('/', os.sep)).format(i, '*',
-                                                                                                              '*')
+        glob_param = os.path.join(
+            disk_drive.replace('/', os.sep),
+            DOWNLOAD_PATH.replace('/', os.sep)) \
+            .format(i, '*', '*')
         glob_result = glob.glob(glob_param)
         video_dir_paths.extend(glob_result)
     return video_dir_paths
