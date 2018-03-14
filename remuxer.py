@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import argparse
 import glob
 import json
 import os
 import shutil
-import sys
 
 from config import *
 
@@ -28,13 +28,13 @@ def convert_format(video_file_name, to_format):
     return video_file_name.replace(get_format(video_file_name), to_format)
 
 
-def get_video_dir_path():
+def get_video_dir_path(disk_drive):
     """
     Scan the external sdcard to get all downloaded videos' path.
+    :param disk_drive: (str) Folder path where store /Android/ folder.
     :return: (list) All dictionaries which contain downloaded videos.
     """
     video_dir_paths = []
-    disk_drive = sys.argv[1]
     for i in PACKAGE_NAMES:
         glob_param = os.path.join(
             disk_drive.replace('/', os.sep),
@@ -139,10 +139,23 @@ def move_to_default_path(video_path):
 
 
 if __name__ == '__main__':
-    video_path = get_video_dir_path()
+    parser = argparse.ArgumentParser(description='Binding Bilibili Android Application downloaded video files.')
+    parser.add_argument('-b', '--bind', action='store_true', help='Bind all video files and convert to mp4.')
+    parser.add_argument('-m', '--move', action='store_true', help='Move all files to tv.danmaku.bili.')
+    parser.add_argument('--version', action='version', version='BiliRemux {}'.format(APP_VERSION))
+    parser.add_argument('input', help='The path where store /Android/ folder.')
+    args = parser.parse_args()
+    disk_drive = args.input
+    if disk_drive[-1] != os.sep:
+        disk_drive = '{}{}'.format(disk_drive, os.sep)
+    video_path = get_video_dir_path(disk_drive)
     print(video_path)
-    for part in video_path:
-        flv_path = find_flv_path(part)
-        if flv_path is not None:
-            remux(flv_path)
-    move_to_default_path(video_path)
+    if args.bind:
+        # print('binding')
+        for part in video_path:
+            flv_path = find_flv_path(part)
+            if flv_path is not None:
+                remux(flv_path)
+    if args.move:
+        # print('moving')
+        move_to_default_path(video_path)
