@@ -142,7 +142,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Binding Bilibili Android Application downloaded video files.')
     parser.add_argument('-b', '--bind', action='store_true', help='Bind all video files and convert to mp4.')
     parser.add_argument('-m', '--move', action='store_true', help='Move all files to tv.danmaku.bili.')
-    parser.add_argument('--version', action='version', version='BiliRemux {}'.format(APP_VERSION))
+    parser.add_argument('-v', '--version', action='version', version='BiliRemux {}.'.format(APP_VERSION))
     parser.add_argument('input', help='The path where store /Android/ folder.')
     args = parser.parse_args()
     disk_drive = args.input

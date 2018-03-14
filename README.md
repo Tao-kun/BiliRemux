@@ -14,7 +14,16 @@ A remuxer for BiliBili Android Application
 
 2. Run it.
 ```
-python remuxer.py [sdcard path with \ or /]
+python remuxer.py [-h] [-b] [-m] [--version] input
+
+positional arguments:
+  input       The path where store /Android/ folder
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -b, --bind  Bind all video files and convert to mp4
+  -m, --move  Move all files to tv.danmaku.bili
+  -v, --version   show program's version number and exit
 ```
 
 ## License
