@@ -92,7 +92,7 @@ def remux(flv_video_path):
             shutil.move(video_list[0], '{}_remux.mp4'.format(flv_video_path))
         # flv/blv
         else:
-            command = FFMPEG_PATH + ' -i {}  -y -vcodec copy -acodec copy -movflags +faststart {}_remux.mp4'
+            command = FFMPEG_PATH + ' -i {}  -y -c copy {}_remux.mp4'
             os.system(command.format(video_list[0], flv_video_path))
     else:
         # Convert flv to ts, then concat them because flv could not concat successfully.
@@ -101,11 +101,11 @@ def remux(flv_video_path):
         # ffmpeg -i "concat:input1.ts|input2.ts" -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
         # REFER: http://blog.csdn.net/doublefi123/article/details/47276739
         for video in video_list:
-            command = FFMPEG_PATH + ' -i {input} -c copy -bsf:v h264_mp4toannexb -f mpegts {output}'
+            command = FFMPEG_PATH + ' -i {input} -c copy -f mpegts {output}'
             os.system(command.format(input=video, output=convert_format(video, 'ts')))
             os.remove(video)
         video_list = [convert_format(video, 'ts') for video in video_list]
-        command = FFMPEG_PATH + ' -i "concat:{}" -c copy -bsf:a aac_adtstoasc -movflags +faststart {}_remux.mp4'
+        command = FFMPEG_PATH + ' -i "concat:{}" -c copy {}_remux.mp4'
         os.system(command.format('|'.join(video_list), flv_video_path))
     # delete flv/blv/mp4(segmented)
     for file in files_in_flv_path:
@@ -130,20 +130,23 @@ def move_to_default_path(video_path):
     :return: (NoneType) None
     """
     for i in video_path:
+        destination_path_entry_json = '{}{}entry.json'.format(i.replace(i.split(os.sep)[-4], 'tv.danmaku.bili'), os.sep)
         # i of video_path: Android/data/tv.danmaku.bilixl/download/aid/pid
-        if i.split(os.sep)[-4] != 'tv.danmaku.bili':
+        if i.split(os.sep)[-4] != 'tv.danmaku.bili' and not os.path.exists(destination_path_entry_json):
             destination_path = i.replace(i.split(os.sep)[-4], 'tv.danmaku.bili')
             shutil.move(i, destination_path)
             # Android/data/tv.danmaku.bilixl/download/aid/pid -> Android/data/tv.danmaku.bilixl/download/aid
             os.rmdir((os.sep).join(i.split(os.sep)[:-1]))
+        else:
+            continue
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Binding Bilibili Android Application downloaded video files.')
-    parser.add_argument('-b', '--bind', action='store_true', help='Bind all video files and convert to mp4.')
-    parser.add_argument('-m', '--move', action='store_true', help='Move all files to tv.danmaku.bili.')
-    parser.add_argument('-v', '--version', action='version', version='BiliRemux {}.'.format(APP_VERSION))
-    parser.add_argument('input', help='The path where store /Android/ folder.')
+    parser = argparse.ArgumentParser(description='Binding Bilibili Android Application downloaded video files')
+    parser.add_argument('-b', '--bind', action='store_true', help='Bind all video files and convert to mp4')
+    parser.add_argument('-m', '--move', action='store_true', help='Move all files to tv.danmaku.bili')
+    parser.add_argument('-v', '--version', action='version', version='BiliRemux {}'.format(APP_VERSION))
+    parser.add_argument('input', help='The path where store /Android/ folder')
     args = parser.parse_args()
     disk_drive = args.input
     if disk_drive[-1] != os.sep:

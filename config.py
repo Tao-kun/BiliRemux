@@ -6,7 +6,7 @@ APP_VERSION = 0.1
 # Please change it into the dictionary which contains your FFmpeg(.exe).
 FFMPEG_PATH = r'D:\ffmpeg-3.4-win64-shared\bin\ffmpeg.exe'
 
-# There are at least 3 version of BilBili Application.
+# There are at least 3 version of BilBili Offical Application.
 # tv.danmaku.bili              哔哩哔哩动画(正式版)
 # tv.danmaku.bilixl            哔哩哔哩白（怀旧版)
 # com.bilibili.app.blue        哔哩哔哩概念版（测试版）
