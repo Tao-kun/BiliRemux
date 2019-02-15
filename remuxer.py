@@ -3,7 +3,9 @@ import argparse
 import glob
 import json
 import os
+import re
 import shutil
+import sys
 
 from config import *
 
@@ -78,13 +80,11 @@ def remux(flv_video_path):
     :return: (NoneType) None
     """
     video_list = []
+    filename_regex = re.compile(r'^\d\.(flv|blv|mp4)$')
     files_in_flv_path = glob.glob('{}{}*'.format(flv_video_path, os.sep))
     for file in files_in_flv_path:
         file_name = file.split(os.sep)[-1]
-        # len('0.flv')        == 5
-        # len('index.json')   == 10
-        # len('0.flv.4m.sum') == 12
-        if 5 <= len(file_name) < 10:
+        if re.match(filename_regex, file_name):
             video_list.append(os.path.join(flv_video_path, file_name))
     if len(video_list) == 1:
         # MP4
@@ -152,9 +152,12 @@ if __name__ == '__main__':
     if disk_drive[-1] != os.sep:
         disk_drive = '{}{}'.format(disk_drive, os.sep)
     video_path = get_video_dir_path(disk_drive)
-    print(video_path)
+    # print(video_path)
     if args.bind:
         # print('binding')
+        if len(glob.glob(FFMPEG_PATH)) == 0:
+            print('Cannot find ffmpeg! Exiting...')
+            sys.exit(-1)
         for part in video_path:
             flv_path = find_flv_path(part)
             if flv_path is not None:
