@@ -1,7 +1,7 @@
 # Bilibili Remuxer
 
 A remuxer for BiliBili Android Application
-(tv.danmaku.bilibili, tv.danmaku.bilibilixl, com.bilibili.app.blue).
+(tv.danmaku.bili, tv.danmaku.bilixl, com.bilibili.app.blue, com.bilibili.app.in).
 
 ## Dependencies
 
